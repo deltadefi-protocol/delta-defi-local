@@ -41,6 +41,19 @@ services:
         "--match", "*"
       ]
 
+  ogmios:
+    image: cardanosolutions/ogmios:v6.13.0
+    volumes:
+      - ./devnet:/devnet
+    ports:
+      - "1337:1337"
+    command:
+      [ "--host", "0.0.0.0"
+      , "--port", "1337"
+      , "--node-socket", "/devnet/node.socket"
+      , "--node-config", "/devnet/cardano-node.json"
+      ]
+
   hydra-node-1:
    # NOTE: Make sure to use the same image in ./seed-devnet.sh
     image: ghcr.io/cardano-scaling/hydra-node:0.22.2
