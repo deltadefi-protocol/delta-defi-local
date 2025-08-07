@@ -1,3 +1,4 @@
 [submodule "mesh"]
 	path = mesh
-	url = https://github.com/MeshJS/mesh/tree/feature/kupo-provider.git
+	url = https://github.com/MeshJS/mesh.git
+    branch = feature/kupo-provider
