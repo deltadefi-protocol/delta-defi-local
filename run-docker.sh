@@ -21,9 +21,11 @@ if ( ${DOCKER_COMPOSE_CMD} ps | grep hydra-node > /dev/null 2>&1 ); then
 fi
 
 "${SCRIPT_DIR}/prepare-devnet.sh"
-sleep 5
+sleep 3
 ${DOCKER_COMPOSE_CMD} up -d cardano-node
-sleep 5
+sleep 3
+${DOCKER_COMPOSE_CMD} up -d kupo
+sleep 3
 "${SCRIPT_DIR}/seed-devnet.sh"
 ${DOCKER_COMPOSE_CMD} up -d hydra-node-{1,2,3,4}
 echo >&2 -e "\n# Launch TUI on hydra-node-1: ${DOCKER_COMPOSE_CMD} run hydra-tui-1"

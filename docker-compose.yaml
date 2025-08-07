@@ -26,6 +26,21 @@ services:
         , "--byron-signing-key", "/devnet/byron-delegate.key"
         ]
 
+  kupo:
+    image: cardanosolutions/kupo:v2.11.0
+    volumes:
+      - ./devnet:/devnet
+    ports:
+      - "1442:1442"
+    command:
+      [ "--host", "0.0.0.0",
+        "--node-socket", "/devnet/node.socket",
+        "--node-config", "/devnet/cardano-node.json",
+        "--workdir", "/devnet/kupo/db",
+        "--since", "origin",
+        "--match", "*"
+      ]
+
   hydra-node-1:
    # NOTE: Make sure to use the same image in ./seed-devnet.sh
     image: ghcr.io/cardano-scaling/hydra-node:0.22.2
