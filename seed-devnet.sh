@@ -80,9 +80,41 @@ function seedFaucet() {
         --tx-body-file ${DEVNET_DIR}/seed-${ACTOR}.draft \
         --signing-key-file ${DEVNET_DIR}/credentials/faucet.sk \
         --out-file ${DEVNET_DIR}/seed-${ACTOR}.signed >&2
-    SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/seed-${ACTOR}.signed | tr -d '\r')
+    SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/seed-${ACTOR}.signed | tr -d '\r' | jq -r '.txhash')
     SEED_TXIN="${SEED_TXID}#0"
     ccli conway transaction submit --tx-file ${DEVNET_DIR}/seed-${ACTOR}.signed >&2
+
+    echo -n >&2 "Waiting for utxo ${SEED_TXIN}.."
+
+    while [[ "$(ccli query utxo --tx-in "${SEED_TXIN}" --out-file /dev/stdout | jq ".\"${SEED_TXIN}\"")" = "null" ]]; do
+        sleep 1
+        echo -n >&2 "."
+    done
+    echo >&2 "Done"
+}
+
+function seedFaucetAddress() {
+    ADDRESS=${1}
+    AMOUNT=${2}
+    echo >&2 "Seeding a UTXO from faucet to ${ADDRESS} with ${AMOUNT}Ł"
+
+    FAUCET_ADDR=$(ccli conway address build --payment-verification-key-file ${DEVNET_DIR}/credentials/faucet.vk)
+    FAUCET_TXIN=$(ccli conway query utxo --address ${FAUCET_ADDR} --out-file /dev/stdout | jq -r 'keys[0]')
+
+    ccli conway transaction build --cardano-mode \
+        --change-address ${FAUCET_ADDR} \
+        --tx-in ${FAUCET_TXIN} \
+        --tx-out ${ADDRESS}+${AMOUNT} \
+        --out-file ${DEVNET_DIR}/seed-${ADDRESS}.draft >&2
+    ccli conway transaction sign \
+        --tx-body-file ${DEVNET_DIR}/seed-${ADDRESS}.draft \
+        --signing-key-file ${DEVNET_DIR}/credentials/faucet.sk \
+        --out-file ${DEVNET_DIR}/seed-${ADDRESS}.signed >&2
+
+    SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/seed-${ADDRESS}.signed | tr -d '\r' | jq -r '.txhash')
+    SEED_TXIN="${SEED_TXID}#0"
+    echo -n >&2 "Submitting transaction ${SEED_TXID}.."
+    ccli conway transaction submit --tx-file ${DEVNET_DIR}/seed-${ADDRESS}.signed >&2
 
     echo -n >&2 "Waiting for utxo ${SEED_TXIN}.."
 
@@ -124,6 +156,9 @@ seedFaucet "alice-funds" 100000000 # 100 Ada to commit
 seedFaucet "bob-funds" 50000000 # 50 Ada to commit
 seedFaucet "charlie-funds" 25000000 # 25 Ada to commit
 seedFaucet "david-funds" 30000000 # 30 Ada to commit
+
+echo >&2 "Distributing funds to DeltaDefi specific accounts..."
+seedFaucetAddress "addr_test1qra9zdhfa8kteyr3mfe7adkf5nlh8jl5xcg9e7pcp5w9yhyf5tek6vpnha97yd5yw9pezm3wyd77fyrfs3ynftyg7njs5cfz2x" 500000000 # 500 Ada to DeltaDefi
 
 queryPParams
 echo "HYDRA_SCRIPTS_TX_ID=$(publishReferenceScripts)" > .env
