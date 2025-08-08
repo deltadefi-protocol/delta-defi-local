@@ -7,7 +7,7 @@ services:
       - "6379:6379"
 
   cardano-node:
-      image: ghcr.io/intersectmbo/cardano-node:10.5.1
+      image: ghcr.io/intersectmbo/cardano-node:10.4.1
       volumes:
         - ./devnet:/devnet
       environment:
