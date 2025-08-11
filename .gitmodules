@@ -2,7 +2,8 @@
 	path = mesh
 	url = https://github.com/MeshJS/mesh.git
     branch = feature/kupo-provider
+
 [submodule "belvedere"]
 	path = belvedere
 	url = https://github.com/deltadefi-protocol/belvedere.git
-    branch = develop
+    branch = local-test
