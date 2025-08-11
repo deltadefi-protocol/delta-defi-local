@@ -2,6 +2,13 @@
 
 This repo is to assist in building DeltaDefi locally, it will use a local devnet for testing purposes
 
+## Getting started
+
+```
+git submodule init
+git submodule update
+```
+
 ### Usage
 
 Give permissions to the scripts `prepare-devnet.sh`, `seed-devnet.sh` and `run-docker.sh`. Then simply
