@@ -7,24 +7,33 @@ services:
       - "6379:6379"
 
   cardano-node:
-      image: ghcr.io/intersectmbo/cardano-node:10.4.1
-      volumes:
-        - ./devnet:/devnet
-      environment:
-        - CARDANO_BLOCK_PRODUCER=true
-        - CARDANO_SOCKET_PATH=/devnet/node.socket # used by cardano-node
-        - CARDANO_NODE_SOCKET_PATH=/devnet/node.socket # used by cardano-cli
-      command:
-        [ "run"
-        , "--config", "/devnet/cardano-node.json"
-        , "--topology", "/devnet/topology.json"
-        , "--database-path", "/devnet/db"
-        , "--shelley-kes-key", "/devnet/kes.skey"
-        , "--shelley-vrf-key", "/devnet/vrf.skey"
-        , "--shelley-operational-certificate", "/devnet/opcert.cert"
-        , "--byron-delegation-certificate", "/devnet/byron-delegation.cert"
-        , "--byron-signing-key", "/devnet/byron-delegate.key"
-        ]
+    image: ghcr.io/intersectmbo/cardano-node:10.4.1
+    volumes:
+      - ./devnet:/devnet
+    environment:
+      - CARDANO_BLOCK_PRODUCER=true
+      - CARDANO_SOCKET_PATH=/devnet/node.socket # used by cardano-node
+      - CARDANO_NODE_SOCKET_PATH=/devnet/node.socket # used by cardano-cli
+    command:
+      [
+        "run",
+        "--config",
+        "/devnet/cardano-node.json",
+        "--topology",
+        "/devnet/topology.json",
+        "--database-path",
+        "/devnet/db",
+        "--shelley-kes-key",
+        "/devnet/kes.skey",
+        "--shelley-vrf-key",
+        "/devnet/vrf.skey",
+        "--shelley-operational-certificate",
+        "/devnet/opcert.cert",
+        "--byron-delegation-certificate",
+        "/devnet/byron-delegation.cert",
+        "--byron-signing-key",
+        "/devnet/byron-delegate.key",
+      ]
 
   kupo:
     image: cardanosolutions/kupo:v2.11.0
@@ -33,12 +42,19 @@ services:
     ports:
       - "1442:1442"
     command:
-      [ "--host", "0.0.0.0",
-        "--node-socket", "/devnet/node.socket",
-        "--node-config", "/devnet/cardano-node.json",
-        "--workdir", "/devnet/kupo/db",
-        "--since", "origin",
-        "--match", "*"
+      [
+        "--host",
+        "0.0.0.0",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--node-config",
+        "/devnet/cardano-node.json",
+        "--workdir",
+        "/devnet/kupo/db",
+        "--since",
+        "origin",
+        "--match",
+        "*",
       ]
 
   ogmios:
@@ -48,14 +64,19 @@ services:
     ports:
       - "1337:1337"
     command:
-      [ "--host", "0.0.0.0"
-      , "--port", "1337"
-      , "--node-socket", "/devnet/node.socket"
-      , "--node-config", "/devnet/cardano-node.json"
+      [
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "1337",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--node-config",
+        "/devnet/cardano-node.json",
       ]
 
   hydra-node-1:
-   # NOTE: Make sure to use the same image in ./seed-devnet.sh
+    # NOTE: Make sure to use the same image in ./seed-devnet.sh
     image: ghcr.io/cardano-scaling/hydra-node:0.22.2
     volumes:
       - ./devnet:/devnet
@@ -63,31 +84,53 @@ services:
       - "4001:4001"
       - "5001:5001"
     command:
-      [ "--node-id", "1"
-      , "--api-host", "0.0.0.0"
-      , "--listen", "172.16.238.10:5001"
-      , "--monitoring-port", "6001"
-      , "--peer", "172.16.238.20:5001"
-      , "--peer", "172.16.238.30:5001"
-      , "--peer", "172.16.238.40:5001"
-      , "--hydra-scripts-tx-id", "${HYDRA_SCRIPTS_TX_ID}"
-      , "--hydra-signing-key", "/devnet/credentials/alice-hydra.sk"
-      , "--hydra-verification-key", "/devnet/credentials/bob-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/charlie-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/david-hydra.vk"
-      , "--cardano-signing-key", "/devnet/credentials/alice-node.sk"
-      , "--cardano-verification-key", "/devnet/credentials/bob-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/charlie-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/david-node.vk"
-      , "--ledger-protocol-parameters", "/devnet/protocol-parameters.json"
-      , "--testnet-magic", "42"
-      , "--node-socket", "/devnet/node.socket"
-      , "--persistence-dir", "/devnet/persistence/alice"
-      , "--contestation-period", "3s"
+      [
+        "--node-id",
+        "1",
+        "--api-host",
+        "0.0.0.0",
+        "--listen",
+        "172.16.239.10:5001",
+        "--monitoring-port",
+        "6001",
+        "--peer",
+        "172.16.239.20:5001",
+        "--peer",
+        "172.16.239.30:5001",
+        "--peer",
+        "172.16.239.40:5001",
+        "--hydra-scripts-tx-id",
+        "${HYDRA_SCRIPTS_TX_ID}",
+        "--hydra-signing-key",
+        "/devnet/credentials/alice-hydra.sk",
+        "--hydra-verification-key",
+        "/devnet/credentials/bob-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/charlie-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/david-hydra.vk",
+        "--cardano-signing-key",
+        "/devnet/credentials/alice-node.sk",
+        "--cardano-verification-key",
+        "/devnet/credentials/bob-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/charlie-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/david-node.vk",
+        "--ledger-protocol-parameters",
+        "/devnet/protocol-parameters.json",
+        "--testnet-magic",
+        "42",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--persistence-dir",
+        "/devnet/persistence/alice",
+        "--contestation-period",
+        "3s",
       ]
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.10
+        ipv4_address: 172.16.239.10
     restart: always
 
   hydra-node-2:
@@ -99,31 +142,53 @@ services:
       - "4002:4001"
       - "5002:5001"
     command:
-      [ "--node-id", "2"
-      , "--api-host", "0.0.0.0"
-      , "--listen", "172.16.238.20:5001"
-      , "--monitoring-port", "6001"
-      , "--peer", "172.16.238.10:5001"
-      , "--peer", "172.16.238.30:5001"
-      , "--peer", "172.16.238.40:5001"
-      , "--hydra-scripts-tx-id", "${HYDRA_SCRIPTS_TX_ID}"
-      , "--hydra-signing-key", "/devnet/credentials/bob-hydra.sk"
-      , "--hydra-verification-key", "/devnet/credentials/alice-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/charlie-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/david-hydra.vk"
-      , "--cardano-signing-key", "/devnet/credentials/bob-node.sk"
-      , "--cardano-verification-key", "/devnet/credentials/alice-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/charlie-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/david-node.vk"
-      , "--ledger-protocol-parameters", "/devnet/protocol-parameters.json"
-      , "--testnet-magic", "42"
-      , "--node-socket", "/devnet/node.socket"
-      , "--persistence-dir", "/devnet/persistence/bob"
-      , "--contestation-period", "3s"
+      [
+        "--node-id",
+        "2",
+        "--api-host",
+        "0.0.0.0",
+        "--listen",
+        "172.16.239.20:5001",
+        "--monitoring-port",
+        "6001",
+        "--peer",
+        "172.16.239.10:5001",
+        "--peer",
+        "172.16.239.30:5001",
+        "--peer",
+        "172.16.239.40:5001",
+        "--hydra-scripts-tx-id",
+        "${HYDRA_SCRIPTS_TX_ID}",
+        "--hydra-signing-key",
+        "/devnet/credentials/bob-hydra.sk",
+        "--hydra-verification-key",
+        "/devnet/credentials/alice-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/charlie-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/david-hydra.vk",
+        "--cardano-signing-key",
+        "/devnet/credentials/bob-node.sk",
+        "--cardano-verification-key",
+        "/devnet/credentials/alice-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/charlie-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/david-node.vk",
+        "--ledger-protocol-parameters",
+        "/devnet/protocol-parameters.json",
+        "--testnet-magic",
+        "42",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--persistence-dir",
+        "/devnet/persistence/bob",
+        "--contestation-period",
+        "3s",
       ]
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.20
+        ipv4_address: 172.16.239.20
     restart: always
 
   hydra-node-3:
@@ -137,31 +202,53 @@ services:
       - "4003:4001"
       - "5003:5001"
     command:
-      [ "--node-id", "3"
-      , "--api-host", "0.0.0.0"
-      , "--listen", "172.16.238.30:5001"
-      , "--monitoring-port", "6001"
-      , "--peer", "172.16.238.10:5001"
-      , "--peer", "172.16.238.20:5001"
-      , "--peer", "172.16.238.40:5001"
-      , "--hydra-scripts-tx-id", "${HYDRA_SCRIPTS_TX_ID}"
-      , "--hydra-signing-key", "/devnet/credentials/charlie-hydra.sk"
-      , "--hydra-verification-key", "/devnet/credentials/alice-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/bob-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/david-hydra.vk"
-      , "--cardano-signing-key", "/devnet/credentials/charlie-node.sk"
-      , "--cardano-verification-key", "/devnet/credentials/alice-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/bob-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/david-node.vk"
-      , "--ledger-protocol-parameters", "/devnet/protocol-parameters.json"
-      , "--testnet-magic", "42"
-      , "--node-socket", "/devnet/node.socket"
-      , "--persistence-dir", "/devnet/persistence/charlie"
-      , "--contestation-period", "3s"
+      [
+        "--node-id",
+        "3",
+        "--api-host",
+        "0.0.0.0",
+        "--listen",
+        "172.16.239.30:5001",
+        "--monitoring-port",
+        "6001",
+        "--peer",
+        "172.16.239.10:5001",
+        "--peer",
+        "172.16.239.20:5001",
+        "--peer",
+        "172.16.239.40:5001",
+        "--hydra-scripts-tx-id",
+        "${HYDRA_SCRIPTS_TX_ID}",
+        "--hydra-signing-key",
+        "/devnet/credentials/charlie-hydra.sk",
+        "--hydra-verification-key",
+        "/devnet/credentials/alice-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/bob-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/david-hydra.vk",
+        "--cardano-signing-key",
+        "/devnet/credentials/charlie-node.sk",
+        "--cardano-verification-key",
+        "/devnet/credentials/alice-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/bob-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/david-node.vk",
+        "--ledger-protocol-parameters",
+        "/devnet/protocol-parameters.json",
+        "--testnet-magic",
+        "42",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--persistence-dir",
+        "/devnet/persistence/charlie",
+        "--contestation-period",
+        "3s",
       ]
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.30
+        ipv4_address: 172.16.239.30
     restart: always
 
   hydra-node-4:
@@ -175,74 +262,111 @@ services:
       - "4004:4001"
       - "5004:5001"
     command:
-      [ "--node-id", "4"
-      , "--api-host", "0.0.0.0"
-      , "--listen", "172.16.238.40:5001"
-      , "--monitoring-port", "6001"
-      , "--peer", "172.16.238.10:5001"
-      , "--peer", "172.16.238.20:5001"
-      , "--peer", "172.16.238.30:5001"
-      , "--hydra-scripts-tx-id", "${HYDRA_SCRIPTS_TX_ID}"
-      , "--hydra-signing-key", "/devnet/credentials/david-hydra.sk"
-      , "--hydra-verification-key", "/devnet/credentials/alice-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/bob-hydra.vk"
-      , "--hydra-verification-key", "/devnet/credentials/charlie-hydra.vk"
-      , "--cardano-signing-key", "/devnet/credentials/david-node.sk"
-      , "--cardano-verification-key", "/devnet/credentials/alice-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/bob-node.vk"
-      , "--cardano-verification-key", "/devnet/credentials/charlie-node.vk"
-      , "--ledger-protocol-parameters", "/devnet/protocol-parameters.json"
-      , "--testnet-magic", "42"
-      , "--node-socket", "/devnet/node.socket"
-      , "--persistence-dir", "/devnet/persistence/david"
-      , "--contestation-period", "3s"
+      [
+        "--node-id",
+        "4",
+        "--api-host",
+        "0.0.0.0",
+        "--listen",
+        "172.16.239.40:5001",
+        "--monitoring-port",
+        "6001",
+        "--peer",
+        "172.16.239.10:5001",
+        "--peer",
+        "172.16.239.20:5001",
+        "--peer",
+        "172.16.239.30:5001",
+        "--hydra-scripts-tx-id",
+        "${HYDRA_SCRIPTS_TX_ID}",
+        "--hydra-signing-key",
+        "/devnet/credentials/david-hydra.sk",
+        "--hydra-verification-key",
+        "/devnet/credentials/alice-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/bob-hydra.vk",
+        "--hydra-verification-key",
+        "/devnet/credentials/charlie-hydra.vk",
+        "--cardano-signing-key",
+        "/devnet/credentials/david-node.sk",
+        "--cardano-verification-key",
+        "/devnet/credentials/alice-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/bob-node.vk",
+        "--cardano-verification-key",
+        "/devnet/credentials/charlie-node.vk",
+        "--ledger-protocol-parameters",
+        "/devnet/protocol-parameters.json",
+        "--testnet-magic",
+        "42",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--persistence-dir",
+        "/devnet/persistence/david",
+        "--contestation-period",
+        "3s",
       ]
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.40
+        ipv4_address: 172.16.239.40
     restart: always
 
   hydra-tui-1:
     image: ghcr.io/cardano-scaling/hydra-tui:0.22.2
     command:
-      [ "--connect", "172.16.238.10:4001"
-      , "--node-socket", "/devnet/node.socket"
-      , "--testnet-magic", "42"
-      , "--cardano-signing-key", "/devnet/credentials/alice-funds.sk"
+      [
+        "--connect",
+        "172.16.239.10:4001",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--testnet-magic",
+        "42",
+        "--cardano-signing-key",
+        "/devnet/credentials/alice-funds.sk",
       ]
     volumes:
       - ./devnet:/devnet
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.11
+        ipv4_address: 172.16.239.11
 
   hydra-tui-2:
     image: ghcr.io/cardano-scaling/hydra-tui:0.22.2
     command:
-      [ "--connect", "172.16.238.20:4001"
-      , "--node-socket", "/devnet/node.socket"
-      , "--testnet-magic", "42"
-      , "--cardano-signing-key", "/devnet/credentials/bob-funds.sk"
+      [
+        "--connect",
+        "172.16.239.20:4001",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--testnet-magic",
+        "42",
+        "--cardano-signing-key",
+        "/devnet/credentials/bob-funds.sk",
       ]
     volumes:
       - ./devnet:/devnet
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.21
+        ipv4_address: 172.16.239.21
 
   hydra-tui-3:
     image: ghcr.io/cardano-scaling/hydra-tui:0.22.2
     command:
-      [ "--connect", "172.16.238.30:4001"
-      , "--node-socket", "/devnet/node.socket"
-      , "--testnet-magic", "42"
-      , "--cardano-signing-key", "/devnet/credentials/charlie-funds.sk"
+      [
+        "--connect",
+        "172.16.239.30:4001",
+        "--node-socket",
+        "/devnet/node.socket",
+        "--testnet-magic",
+        "42",
+        "--cardano-signing-key",
+        "/devnet/credentials/charlie-funds.sk",
       ]
     volumes:
       - ./devnet:/devnet
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.31
+        ipv4_address: 172.16.239.31
 
   prometheus:
     image: prom/prometheus:latest
@@ -250,12 +374,44 @@ services:
     ports:
       - "9090:9090"
     command:
-    - --config.file=/etc/prometheus/prometheus.yml
+      - --config.file=/etc/prometheus/prometheus.yml
     volumes:
-    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
       hydra_net:
-        ipv4_address: 172.16.238.5
+        ipv4_address: 172.16.239.5
+  belvedere:
+    build:
+      context: ./belvedere
+      dockerfile: Dockerfile
+      args:
+        GITHUB_TOKEN: <ur_github_token_here>
+    volumes:
+      - ./mesh:/mesh
+    ports:
+      - "50051:50051"
+    environment:
+      NETWORK_ID: 0
+      ENV: local
+      REDIS_URL: redis://redis:6379
+      HYDRA_URL: hydra-node-1:4001
+      PORT: 50051
+      BLOCKFROST_API_KEY: preprodmZyqlcWFFR7s8sxiHsG6nOGyTVWnoqUG
+      NETWORK: preprod
+      MAESTRO_API_KEY: ImxQfCYDL4cuVdpzrJrkT7AUtmrAkc7n
+      APP_OWNER_SEED_PHRASE: trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade,trade
+      SENTRY_DSN: https://c904351809f1430f945b8567bb91bb6d@o4507389947281408.ingest.us.sentry.io/4508965015453696
+      HYDRA_PEER2_URL: hydra-node-2:4002
+      HYDRA_PEER3_URL: hydra-node-3:4003
+      HYDRA_PEER4_URL: hydra-node-4:4004
+      OGMIOS_URL: ws://ogmios:1337
+      KUPO_URL: http://kupo:1442
+    depends_on:
+      - redis
+      - hydra-node-1
+      - hydra-node-2
+      - hydra-node-3
+      - hydra-node-4
 
 networks:
   hydra_net:
@@ -263,5 +419,5 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.238.0/24
-          gateway: 172.16.238.1
+        - subnet: 172.16.239.0/24
+          gateway: 172.16.239.1

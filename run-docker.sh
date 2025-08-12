@@ -23,13 +23,15 @@ fi
 "${SCRIPT_DIR}/prepare-devnet.sh"
 sleep 3
 ${DOCKER_COMPOSE_CMD} up -d cardano-node
-sleep 3
+# sleep 3
 ${DOCKER_COMPOSE_CMD} up -d kupo
-sleep 3
+# sleep 3
 ${DOCKER_COMPOSE_CMD} up -d ogmios
-sleep 3
+# sleep 3
 "${SCRIPT_DIR}/seed-devnet.sh"
 ${DOCKER_COMPOSE_CMD} up -d hydra-node-{1,2,3,4}
 echo >&2 -e "\n# Launch TUI on hydra-node-1: ${DOCKER_COMPOSE_CMD} run hydra-tui-1"
 echo >&2 -e "\n# Stop the demo: ${DOCKER_COMPOSE_CMD} down\n"
-${DOCKER_COMPOSE_CMD} run hydra-tui-1
+# ${DOCKER_COMPOSE_CMD} run hydra-tui-1
+${DOCKER_COMPOSE_CMD} build --no-cache belvedere
+${DOCKER_COMPOSE_CMD} up -d belvedere
