@@ -7,3 +7,28 @@
 	path = belvedere
 	url = https://github.com/deltadefi-protocol/belvedere.git
     branch = local-test
+
+[submodule "espresso"]
+	path = espresso
+	url = https://github.com/deltadefi-protocol/espresso.git
+	branch = develop
+[submodule "tonic"]
+	path = tonic
+	url = https://github.com/deltadefi-protocol/tonic.git
+	branch = develop
+[submodule "orderbook"]
+	path = orderbook
+	url = https://github.com/deltadefi-protocol/orderbook.git
+	branch = develop
+[submodule "valve"]
+	path = valve
+	url = https://github.com/deltadefi-protocol/valve.git
+	branch = develop
+[submodule "hibiki"]
+	path = hibiki
+	url = https://github.com/deltadefi-protocol/hibiki.git
+	branch = develop
+[submodule "deltadefi-app-frontend"]
+	path = deltadefi-app-frontend
+	url = https://github.com/deltadefi-protocol/deltadefi-app-frontend.git
+	branch = develop
