@@ -66,6 +66,7 @@ services:
       - "1442:1442"
     command:
       [
+        "--prune-utxo",
         "--host",
         "0.0.0.0",
         "--node-socket",
@@ -418,10 +419,8 @@ services:
     depends_on:
       - redis
       - ogmios
-      - hydra-node-1
-      - hydra-node-2
-      - hydra-node-3
-      - hydra-node-4
+      - kupo
+
   espresso-api:
     build:
       context: ./espresso
