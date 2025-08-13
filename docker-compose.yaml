@@ -409,7 +409,7 @@ services:
       context: ./belvedere
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     volumes:
       - ./mesh:/mesh
     ports:
@@ -426,7 +426,7 @@ services:
       context: ./espresso
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     ports:
       - "8080:8080"
     env_file:
@@ -439,7 +439,7 @@ services:
       context: ./espresso
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     env_file:
       - ./env/.espresso.env
     depends_on:
@@ -451,7 +451,7 @@ services:
       context: ./orderbook
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     ports:
       - "50052:50052"
     env_file:
@@ -464,7 +464,7 @@ services:
       context: ./tonic
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     env_file:
       - ./env/.tonic.env
     ports:
@@ -478,7 +478,7 @@ services:
       context: ./hibiki
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     env_file:
       - ./env/.hibiki.env
     ports:
@@ -491,7 +491,7 @@ services:
       context: ./valve
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_github_token_here
+        GITHUB_TOKEN: your_access_token_here
     env_file:
       - ./env/.valve.env
     ports:
@@ -500,6 +500,18 @@ services:
     depends_on:
       - redis
       - postgres
+  frontend:
+    build:
+      context: ./deltadefi-app-frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./env/.deltadefi-app-frontend.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+      - postgres
+      - espresso-api
 networks:
   hydra_net:
     driver: bridge

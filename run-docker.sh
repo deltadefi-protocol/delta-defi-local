@@ -41,3 +41,4 @@ ${DOCKER_COMPOSE_CMD} up -d hibiki
 ${DOCKER_COMPOSE_CMD} up -d tonic
 ${DOCKER_COMPOSE_CMD} up -d espresso-api
 ${DOCKER_COMPOSE_CMD} up -d espresso-worker
+${DOCKER_COMPOSE_CMD} up -d frontend
