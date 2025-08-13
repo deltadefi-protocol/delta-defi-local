@@ -22,6 +22,9 @@ fi
 
 "${SCRIPT_DIR}/prepare-devnet.sh"
 sleep 3
+${DOCKER_COMPOSE_CMD} up -d postgres
+${DOCKER_COMPOSE_CMD} up -d redis
+${DOCKER_COMPOSE_CMD} up -d questdb
 ${DOCKER_COMPOSE_CMD} up -d cardano-node
 # sleep 3
 ${DOCKER_COMPOSE_CMD} up -d kupo
@@ -41,4 +44,3 @@ ${DOCKER_COMPOSE_CMD} up -d hibiki
 ${DOCKER_COMPOSE_CMD} up -d tonic
 ${DOCKER_COMPOSE_CMD} up -d espresso-api
 ${DOCKER_COMPOSE_CMD} up -d espresso-worker
-${DOCKER_COMPOSE_CMD} up -d frontend
