@@ -133,18 +133,6 @@ function publishReferenceScripts() {
     --cardano-signing-key devnet/credentials/faucet.sk
 }
 
-function queryPParams() {
-  echo >&2 "Query Protocol parameters from devnet-config"
-  if [[ -x ${CCLI_CMD} ]]; then
-     ccli query protocol-parameters --socket-path ${DEVNET_DIR}/node.socket  --out-file /dev/stdout \
-      | jq ".txFeeFixed = 0 | .txFeePerByte = 0 | .executionUnitPrices.priceMemory = 0 | .executionUnitPrices.priceSteps = 0" > devnet/protocol-parameters.json
-   else
-     docker exec delta-defi-local-cardano-node-1 cardano-cli query protocol-parameters --testnet-magic ${NETWORK_ID} --socket-path ${DEVNET_DIR}/node.socket --out-file /dev/stdout \
-      | jq ".txFeeFixed = 0 | .txFeePerByte = 0 | .executionUnitPrices.priceMemory = 0 | .executionUnitPrices.priceSteps = 0" > devnet/protocol-parameters.json
-  fi
-  echo >&2 "Saved in protocol-parameters.json"
-}
-
 echo >&2 "Fueling up hydra nodes of alice, bob, charlie, david..."
 seedFaucet "alice-node" 30000000 # 30 Ada to the node
 seedFaucet "bob-node" 30000000 # 30 Ada to the node
@@ -161,7 +149,6 @@ echo >&2 "Distributing funds to DeltaDefi specific accounts..."
 seedFaucetAddress "addr_test1qra9zdhfa8kteyr3mfe7adkf5nlh8jl5xcg9e7pcp5w9yhyf5tek6vpnha97yd5yw9pezm3wyd77fyrfs3ynftyg7njs5cfz2x" 5000000000 # 5000 ADA to DeltaDefi Trade account
 seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000000 # 5000 ADA to DeltaDefi Summer account
 
-queryPParams
 echo "HYDRA_SCRIPTS_TX_ID=$(publishReferenceScripts)" > .env
 echo >&2 "Environment variable stored in '.env'"
 echo >&2 -e "\n\t$(cat .env)\n"

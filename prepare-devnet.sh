@@ -13,6 +13,8 @@ cp -af "$BASEDIR/devnet-config/devnet-base" "$TARGETDIR"
 chmod -R u+w  "$TARGETDIR"
 cp -af "$BASEDIR/devnet-config/credentials" "$TARGETDIR"
 chmod -R u+w "$TARGETDIR"
+cp -af "$BASEDIR/devnet-config/protocol-parameters.json" "$TARGETDIR"
+chmod -R u+w "$TARGETDIR"
 
 echo '{"Producers": []}' > "$TARGETDIR/topology.json"
 sed -i.bak "s/\"startTime\": [0-9]*/\"startTime\": $(date +%s)/" "$TARGETDIR/genesis-byron.json" && \
