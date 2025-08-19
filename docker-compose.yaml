@@ -419,7 +419,7 @@ services:
       context: ./belvedere
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: 
     volumes:
       - ./mesh:/mesh
     ports:
@@ -430,15 +430,17 @@ services:
       - redis
       - ogmios
       - kupo
+    
 
   espresso-api:
     build:
       context: ./espresso
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     ports:
       - "8080:8080"
+      - "8081:8081"
     env_file:
       - ./env/.espresso.env
     depends_on:
@@ -449,7 +451,7 @@ services:
       context: ./espresso
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     env_file:
       - ./env/.espresso.env
     depends_on:
@@ -461,7 +463,7 @@ services:
       context: ./orderbook
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     ports:
       - "50052:50052"
     env_file:
@@ -476,7 +478,7 @@ services:
       context: ./tonic
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     env_file:
       - ./env/.tonic.env
     ports:
@@ -490,7 +492,7 @@ services:
       context: ./hibiki
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     env_file:
       - ./env/.hibiki.env
     ports:
@@ -503,7 +505,7 @@ services:
       context: ./valve
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: your_access_token_here
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     env_file:
       - ./env/.valve.env
     ports:
