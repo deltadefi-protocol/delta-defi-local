@@ -149,6 +149,22 @@ echo >&2 "Distributing funds to DeltaDefi specific accounts..."
 seedFaucetAddress "addr_test1qra9zdhfa8kteyr3mfe7adkf5nlh8jl5xcg9e7pcp5w9yhyf5tek6vpnha97yd5yw9pezm3wyd77fyrfs3ynftyg7njs5cfz2x" 5000000000 # 5000 ADA to DeltaDefi Trade account
 seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000000 # 5000 ADA to DeltaDefi Summer account
 
-echo "HYDRA_SCRIPTS_TX_ID=$(publishReferenceScripts)" > .env
-echo >&2 "Environment variable stored in '.env'"
-echo >&2 -e "\n\t$(cat .env)\n"
+# Replace the existing .env handling code at the end of the file
+# Create or update .env file
+if [ -f .env ]; then
+  # If .env exists, update or add HYDRA_SCRIPTS_TX_ID while preserving other variables
+  SCRIPTS_TX_ID=$(publishReferenceScripts)
+  if grep -q "HYDRA_SCRIPTS_TX_ID=" .env; then
+    # Replace existing HYDRA_SCRIPTS_TX_ID
+    sed -i '' "s/HYDRA_SCRIPTS_TX_ID=.*/HYDRA_SCRIPTS_TX_ID=${SCRIPTS_TX_ID}/" .env
+  else
+    # Add HYDRA_SCRIPTS_TX_ID as a new line
+    echo "HYDRA_SCRIPTS_TX_ID=${SCRIPTS_TX_ID}" >> .env
+  fi
+else
+  # Create a new .env file with just the HYDRA_SCRIPTS_TX_ID
+  echo "HYDRA_SCRIPTS_TX_ID=$(publishReferenceScripts)" > .env
+fi
+
+echo >&2 "Environment variable updated in '.env'"
+echo >&2 -e "\n\t$(grep HYDRA_SCRIPTS_TX_ID .env)\n"
