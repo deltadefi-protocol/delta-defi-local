@@ -148,6 +148,13 @@ seedFaucet "david-funds" 30000000 # 30 Ada to commit
 echo >&2 "Distributing funds to DeltaDefi specific accounts..."
 seedFaucetAddress "addr_test1qra9zdhfa8kteyr3mfe7adkf5nlh8jl5xcg9e7pcp5w9yhyf5tek6vpnha97yd5yw9pezm3wyd77fyrfs3ynftyg7njs5cfz2x" 5000000000 # 5000 ADA to DeltaDefi Trade account
 seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000000 # 5000 ADA to DeltaDefi Summer account
+seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000 # 5 ADA to DeltaDefi Summer account for collateral
+seedFaucetAddress "addr_test1qra9zdhfa8kteyr3mfe7adkf5nlh8jl5xcg9e7pcp5w9yhyf5tek6vpnha97yd5yw9pezm3wyd77fyrfs3ynftyg7njs5cfz2x" 5000000 # 5 ADA to DeltaDefi Trade account for app_oracle
+seedFaucetAddress "addr_test1qra9zdhfa8kteyr3mfe7adkf5nlh8jl5xcg9e7pcp5w9yhyf5tek6vpnha97yd5yw9pezm3wyd77fyrfs3ynftyg7njs5cfz2x" 5000000 # 5 ADA to DeltaDefi Trade account for dex_oracle
+seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000 # 5 ADA to DeltaDefi Summer account for setup
+seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000 # 5 ADA to DeltaDefi Summer account for setup
+seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000 # 5 ADA to DeltaDefi Summer account for setup
+
 
 # Replace the existing .env handling code at the end of the file
 # Create or update .env file
