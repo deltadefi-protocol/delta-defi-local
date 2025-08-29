@@ -133,6 +133,25 @@ function publishReferenceScripts() {
     --cardano-signing-key devnet/credentials/faucet.sk
 }
 
+function publishDDReferenceScripts() {
+  ADDR=${1}
+  AMOUNT=${2}
+  SCRIPT_CBOR=${3}
+  # Determine faucet address and just the **first** txin addressed to it
+  FAUCET_ADDR=$(ccli conway address build --payment-verification-key-file ${DEVNET_DIR}/credentials/faucet.vk)
+  FAUCET_TXIN=$(ccli conway query utxo --address ${FAUCET_ADDR} --out-file /dev/stdout | jq -r 'keys[0]')
+
+  ccli conway transaction build --cardano-mode \
+        --change-address ${FAUCET_ADDR} \
+        --tx-in ${FAUCET_TXIN} \
+        --tx-out ${ACTOR_ADDR}+${AMOUNT} \
+        --out-file ${DEVNET_DIR}/seed-${ACTOR}.draft >&2
+    ccli conway transaction sign \
+        --tx-body-file ${DEVNET_DIR}/seed-${ACTOR}.draft \
+        --signing-key-file ${DEVNET_DIR}/credentials/faucet.sk \
+        --out-file ${DEVNET_DIR}/seed-${ACTOR}.signed >&2
+}
+
 echo >&2 "Fueling up hydra nodes of alice, bob, charlie, david..."
 seedFaucet "alice-node" 30000000 # 30 Ada to the node
 seedFaucet "bob-node" 30000000 # 30 Ada to the node
