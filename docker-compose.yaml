@@ -43,6 +43,7 @@ services:
     image: ghcr.io/intersectmbo/cardano-node:10.4.1
     volumes:
       - ./devnet:/devnet
+      - ./devnet-config/plutus-scripts:/plutus-scripts
     environment:
       - CARDANO_BLOCK_PRODUCER=true
       - CARDANO_SOCKET_PATH=/devnet/node.socket # used by cardano-node
