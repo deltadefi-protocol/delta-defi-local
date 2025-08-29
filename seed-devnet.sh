@@ -149,16 +149,21 @@ function publishDDReferenceScripts() {
         --tx-out ${ADDR}+${AMOUNT} \
         --tx-out-reference-script-file ${SCRIPT_PATH} \
         --out-file ${DEVNET_DIR}/seed-ref-${NAME}.draft >&2
-    ccli conway transaction sign \
+  ccli conway transaction sign \
         --tx-body-file ${DEVNET_DIR}/seed-ref-${NAME}.draft \
         --signing-key-file ${DEVNET_DIR}/credentials/faucet.sk \
         --out-file ${DEVNET_DIR}/seed-ref-${NAME}.signed >&2
 
-    echo -n >&2 "Submitting transaction to create ref script ${NAME}.."
-    ccli conway transaction submit --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed >&2
+  SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed  | tr -d '\r')
+  SEED_TXIN="${SEED_TXID}#0"
+  echo {\"${NAME}\": \"${SEED_TXIN}\"} >> ./devnet-config/plutus-scripts/tx-ids.json
+  echo -n >&2 "Submitting transaction to create ref script ${NAME}.."
+  ccli conway transaction submit --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed >&2
 }
 
-publishDDReferenceScripts "addr_test1qpsjnpqljma4vdg67vtf8k4xv7umncum5lvrnlupfyyvmtawhmy5tqhkqm4lrwwm6wkykzsa2aafy25vevxhrc3fws0qszw7wl" 60000000 "./plutus-scripts/accountOperation_appDeposit.plutus" "appDeposit"
+rm -rf ./devnet-config/plutus-scripts/tx-ids.json
+echo "" > ./devnet-config/plutus-scripts/tx-ids.json
+publishDDReferenceScripts "addr_test1qpsjnpqljma4vdg67vtf8k4xv7umncum5lvrnlupfyyvmtawhmy5tqhkqm4lrwwm6wkykzsa2aafy25vevxhrc3fws0qszw7wl" 60000000 "./plutus-scripts/accountOperation_appDeposit.plutus" "accountOperation_appDeposit"
 
 # echo >&2 "Fueling up hydra nodes of alice, bob, charlie, david..."
 # seedFaucet "alice-node" 30000000 # 30 Ada to the node
