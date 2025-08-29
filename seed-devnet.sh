@@ -134,7 +134,6 @@ function publishReferenceScripts() {
 }
 
 function publishDDReferenceScripts() {
-  echo >&2 "Publishing DD reference scripts..."
   ADDR=${1}
   AMOUNT=${2}
   SCRIPT_PATH=${3}
@@ -157,7 +156,7 @@ function publishDDReferenceScripts() {
   SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed  | tr -d '\r')
   SEED_TXIN="${SEED_TXID}#0"
   echo ${NAME}=${SEED_TXIN} >> ./devnet-config/plutus-scripts/tx-ids
-  echo -n >&2 "Submitting transaction to create ref script ${NAME}.."
+  echo -n >&2 "Submitting transaction to create ref script ${NAME}.." >&2
   ccli conway transaction submit --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed >&2
 }
 
@@ -169,6 +168,7 @@ SCRIPT_ADDR="addr_test1qpsjnpqljma4vdg67vtf8k4xv7umncum5lvrnlupfyyvmtawhmy5tqhkq
 # Amount of lovelace to include with each script (60M lovelace = 60 ADA)
 SCRIPT_AMOUNT=70000000
 
+echo >&2 "Publishing DD reference scripts..."
 # Process all Plutus scripts in the directory
 for PLUTUS_FILE in ./devnet-config/plutus-scripts/*.plutus; do
   # Extract just the filename without path or extension
