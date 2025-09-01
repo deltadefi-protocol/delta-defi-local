@@ -154,31 +154,11 @@ function publishDDReferenceScripts() {
         --out-file ${DEVNET_DIR}/seed-ref-${NAME}.signed >&2
 
   SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed  | tr -d '\r')
-  SEED_TXIN="${SEED_TXID}#0"
+  SEED_TXIN="${SEED_TXID}"
   echo ${NAME}=${SEED_TXIN} >> ./devnet-config/plutus-scripts/tx-ids
   echo -n >&2 "Submitting transaction to create ref script ${NAME}.." >&2
   ccli conway transaction submit --tx-file ${DEVNET_DIR}/seed-ref-${NAME}.signed >&2
 }
-
-rm -rf ./devnet-config/plutus-scripts/tx-ids
-: > ./devnet-config/plutus-scripts/tx-ids
-
-# Address to publish reference scripts to
-SCRIPT_ADDR="addr_test1qpsjnpqljma4vdg67vtf8k4xv7umncum5lvrnlupfyyvmtawhmy5tqhkqm4lrwwm6wkykzsa2aafy25vevxhrc3fws0qszw7wl"
-# Amount of lovelace to include with each script (60M lovelace = 60 ADA)
-SCRIPT_AMOUNT=70000000
-
-echo >&2 "Publishing DD reference scripts..."
-# Process all Plutus scripts in the directory
-for PLUTUS_FILE in ./devnet-config/plutus-scripts/*.plutus; do
-  # Extract just the filename without path or extension
-  FILENAME=$(basename "$PLUTUS_FILE" .plutus)
-  # Convert filename to uppercase for the reference name
-  REF_NAME=$(echo "$FILENAME" | tr '[:lower:]' '[:upper:]')
-  # Publish the reference script
-  publishDDReferenceScripts "$SCRIPT_ADDR" "$SCRIPT_AMOUNT" "./plutus-scripts/$FILENAME.plutus" "$REF_NAME"
-done
-
 
 echo >&2 "Fueling up hydra nodes of alice, bob, charlie, david..."
 seedFaucet "alice-node" 30000000 # 30 Ada to the node
@@ -222,3 +202,22 @@ fi
 
 echo >&2 "Environment variable updated in '.env'"
 echo >&2 -e "\n\t$(grep HYDRA_SCRIPTS_TX_ID .env)\n"
+
+rm -rf ./devnet-config/plutus-scripts/tx-ids
+: > ./devnet-config/plutus-scripts/tx-ids
+
+# Address to publish reference scripts to
+SCRIPT_ADDR="addr_test1qpsjnpqljma4vdg67vtf8k4xv7umncum5lvrnlupfyyvmtawhmy5tqhkqm4lrwwm6wkykzsa2aafy25vevxhrc3fws0qszw7wl"
+# Amount of lovelace to include with each script (60M lovelace = 60 ADA)
+SCRIPT_AMOUNT=70000000
+
+echo >&2 "Publishing DD reference scripts..."
+# Process all Plutus scripts in the directory
+for PLUTUS_FILE in ./devnet-config/plutus-scripts/*.plutus; do
+  # Extract just the filename without path or extension
+  FILENAME=$(basename "$PLUTUS_FILE" .plutus)
+  # Convert filename to uppercase for the reference name
+  REF_NAME=$(echo "$FILENAME" | tr '[:lower:]' '[:upper:]')
+  # Publish the reference script
+  publishDDReferenceScripts "$SCRIPT_ADDR" "$SCRIPT_AMOUNT" "./plutus-scripts/$FILENAME.plutus" "$REF_NAME"
+done
