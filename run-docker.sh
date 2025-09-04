@@ -33,7 +33,7 @@ ${DOCKER_COMPOSE_CMD} up -d hydra-node-{1,2,3,4}
 echo >&2 -e "\n# Launch TUI on hydra-node-1: ${DOCKER_COMPOSE_CMD} run hydra-tui-1"
 echo >&2 -e "\n# Stop the demo: ${DOCKER_COMPOSE_CMD} down\n"
 # ${DOCKER_COMPOSE_CMD} build --no-cache belvederex
-${DOCKER_COMPOSE_CMD} up -d belvedere
+${DOCKER_COMPOSE_CMD} up --build -d belvedere
 ${DOCKER_COMPOSE_CMD} up -d orderbook
 ${DOCKER_COMPOSE_CMD} up -d valve
 ${DOCKER_COMPOSE_CMD} up -d hibiki
