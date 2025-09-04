@@ -421,7 +421,7 @@ services:
       dockerfile: Dockerfile
       args:
         GITHUB_TOKEN: 
-      ﻿no_cache: true
+      # ﻿no_cache: true
     volumes:
       - ./mesh:/mesh
     ports:
