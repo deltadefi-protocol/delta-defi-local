@@ -32,3 +32,6 @@
 	path = deltadefi-app-frontend
 	url = https://github.com/deltadefi-protocol/deltadefi-app-frontend.git
 	branch = develop
+[submodule "merkle-patricia-forestry"]
+	path = merkle-patricia-forestry
+	url = https://github.com/deltadefi-protocol/merkle-patricia-forestry.git
