@@ -221,3 +221,7 @@ for PLUTUS_FILE in ./devnet-config/plutus-scripts/*.plutus; do
   # Publish the reference script
   publishDDReferenceScripts "$SCRIPT_ADDR" "$SCRIPT_AMOUNT" "./plutus-scripts/$FILENAME.plutus" "$REF_NAME"
 done
+
+echo >&2 "All reference scripts published. Saving to refs env"
+
+cp ./devnet-config/plutus-scripts/tx-ids ./env/.refs.env

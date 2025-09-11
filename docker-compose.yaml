@@ -428,6 +428,7 @@ services:
       - "50051:50051"
     env_file:
       - ./env/.belvedere.env
+      - ./env/.refs.env
     depends_on:
       - redis
       - ogmios
@@ -445,6 +446,7 @@ services:
       - "8081:8081"
     env_file:
       - ./env/.espresso.env
+      - ./env/.script-hash.env
     depends_on:
       - redis
       - postgres
@@ -456,6 +458,7 @@ services:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
     env_file:
       - ./env/.espresso.env
+      - ./env/.script-hash.env
     depends_on:
       - redis
       - postgres
@@ -483,6 +486,7 @@ services:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
     env_file:
       - ./env/.tonic.env
+      - ./env/.script-hash.env
     ports:
       - "50053:50053"
     depends_on:
