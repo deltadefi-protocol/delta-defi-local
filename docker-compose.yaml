@@ -420,7 +420,7 @@ services:
       context: ./belvedere
       dockerfile: Dockerfile
       args:
-        GITHUB_TOKEN: 
+        GITHUB_TOKEN:
       # ﻿no_cache: true
     volumes:
       - ./mesh:/mesh
@@ -433,7 +433,6 @@ services:
       - redis
       - ogmios
       - kupo
-    
 
   espresso-api:
     build:
