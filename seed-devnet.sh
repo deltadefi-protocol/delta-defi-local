@@ -93,6 +93,36 @@ function seedFaucet() {
     echo >&2 "Done"
 }
 
+function mintUSDM() {
+    ADDRESS=${1}
+    AMOUNT=${2}
+    echo >&2 "Minting ${AMOUNT} USDM to ${ADDRESS}"
+
+    FAUCET_ADDR=$(ccli conway address build --payment-verification-key-file ${DEVNET_DIR}/credentials/faucet.vk)
+    FAUCET_TXIN=$(ccli conway query utxo --address ${FAUCET_ADDR} --out-file /dev/stdout | jq -r 'keys[0]')
+
+    ${DOCKER_COMPOSE_CMD} exec cardano-node cardano-cli conway transaction build --cardano-mode \
+        --testnet-magic ${NETWORK_ID} \
+        --change-address ${FAUCET_ADDR} \
+        --tx-in ${FAUCET_TXIN} \
+        --tx-in-collateral ${FAUCET_TXIN} \
+        --tx-out ${ADDRESS}+2000000+"${AMOUNT} c69b981db7a65e339a6d783755f85a2e03afa1cece9714c55fe4c913.5553444d" \
+        --mint="${AMOUNT} c69b981db7a65e339a6d783755f85a2e03afa1cece9714c55fe4c913.5553444d" \
+        --mint-script-file "./devnet/USDM_mint.plutus" \
+        --mint-redeemer-value 0 \
+        --required-signer-hash fa5136e9e9ecbc9071da73eeb6c9a4ff73cbf436105cf8380d1c525c \
+        --out-file ${DEVNET_DIR}/mint-usdm-${ADDRESS}.draft >&2
+    ccli conway transaction sign \
+        --tx-body-file ${DEVNET_DIR}/mint-usdm-${ADDRESS}.draft \
+        --signing-key-file ${DEVNET_DIR}/credentials/faucet.sk \
+        --signing-key-file ${DEVNET_DIR}/credentials/appOwner.sk \
+        --out-file ${DEVNET_DIR}/mint-usdm-${ADDRESS}.signed >&2
+    SEED_TXID=$(ccli_ conway transaction txid --tx-file ${DEVNET_DIR}/mint-usdm-${ADDRESS}.signed | tr -d '\r')
+    SEED_TXIN="${SEED_TXID}#0"
+    echo -n >&2 "Submitting transaction ${SEED_TXID}.."
+    ccli conway transaction submit --tx-file ${DEVNET_DIR}/mint-usdm-${ADDRESS}.signed >&2
+}
+
 function seedFaucetAddress() {
     ADDRESS=${1}
     AMOUNT=${2}
@@ -225,3 +255,5 @@ done
 echo >&2 "All reference scripts published. Saving to refs env"
 
 cp ./devnet-config/plutus-scripts/tx-ids ./env/.refs.env
+
+mintUSDM "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 1000000000000
