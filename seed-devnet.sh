@@ -257,3 +257,6 @@ echo >&2 "All reference scripts published. Saving to refs env"
 cp ./devnet-config/plutus-scripts/tx-ids ./env/.refs.env
 
 mintUSDM "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 1000000000000
+seedFaucetAddress "addr_test1qr77kjlsarq8wy22g4flrcznjh5lkug5mvth7qhhkewgmezwvc8hnnjzy82j5twzf8dfy5gjk04yd09t488ys9605dvq4ymc4x" 5000000000 # 5000 ADA to bacon
+seedFaucetAddress "addr_test1qqzgg5pcaeyea69uptl9da5g7fajm4m0yvxndx9f4lxpkehqgezy0s04rtdwlc0tlvxafpdrfxnsg7ww68ge3j7l0lnszsw2wt" 5000000 # 5 ADA to bacon
+mintUSDM "addr_test1qr77kjlsarq8wy22g4flrcznjh5lkug5mvth7qhhkewgmezwvc8hnnjzy82j5twzf8dfy5gjk04yd09t488ys9605dvq4ymc4x" 1000000000000
